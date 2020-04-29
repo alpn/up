@@ -2,7 +2,7 @@ Up
 ====
 
 Up is a simple utility for uploading stuff to BackBlaze's B2 cluod storage service.
-It's merely a thin wrapper around [Blazer](github.com/kurin/blazer) by @kurin.
+It's merely a thin wrapper around [Blazer](https://github.com/kurin/blazer) by @kurin.
 
 ## Build
 ```bash
