@@ -84,7 +84,7 @@ func main() {
 	//flag.StringVar(&bucketName, "bucket", "", "name of destination bucket")
 
 	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, "A simple utility for uploading stuff to BackBlaze B2\n\n")
+		fmt.Fprintf(os.Stderr, "A simple utility for uploading stuff to BackBlaze's B2\n\n")
 		fmt.Fprintf(os.Stderr, "usage: up [-pipe dst_name] [-dir path] [file1 .. fileN]\n\n")
 		flag.PrintDefaults()
 	}
