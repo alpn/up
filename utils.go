@@ -54,6 +54,10 @@ func getBucket() (context.Context, *b2.Bucket, error) {
 	}
 
 	buckets, err := b2.ListBuckets(ctx)
+	if err != nil {
+		return nil, nil, err
+	}
+
 	bucket := buckets[0]
 
 	return ctx, bucket, nil
