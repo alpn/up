@@ -58,7 +58,10 @@ func getBucket() (context.Context, *b2.Bucket, error) {
 		return nil, nil, err
 	}
 
-	bucket := buckets[0]
+	if len(buckets) > 0 {
+		bucket := buckets[0]
+		return ctx, bucket, nil
+	}
 
-	return ctx, bucket, nil
+	return nil, nil, errors.New("No buckets were found")
 }
