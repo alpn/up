@@ -23,8 +23,8 @@ func uploadSTDIN(files []string) error {
 	if len(files) > 0 {
 		fileName = files[0]
 	} else {
-		t := time.Now()
-		fileName = "stdin_" + t.Format("2020-01-01-T23:59:00.9999")
+		t := time.Now().UTC()
+		fileName = "stdin_" + t.Format("2006-01-02-T15:04:05.9999")
 	}
 
 	fmt.Println("Uploading STDIN to BackBlaze..")
