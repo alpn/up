@@ -36,12 +36,7 @@ func uploadFile(ctx context.Context, bucket *b2.Bucket, path string) error {
 	return nil
 }
 
-func uploadDirectory(rootAbs string) error {
-
-	ctx, bucket, err := getBucket()
-	if nil != err {
-		return err
-	}
+func uploadDirectory(ctx context.Context, bucket *b2.Bucket, rootAbs string) error {
 
 	walkFunc := func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -55,7 +50,7 @@ func uploadDirectory(rootAbs string) error {
 		return nil
 	}
 
-	err = filepath.Walk(rootAbs, walkFunc)
+	err := filepath.Walk(rootAbs, walkFunc)
 	if err != nil {
 		return err
 	}
@@ -63,12 +58,7 @@ func uploadDirectory(rootAbs string) error {
 	return nil
 }
 
-func uploadFiles(files []string) error {
-
-	ctx, bucket, err := getBucket()
-	if nil != err {
-		return err
-	}
+func uploadFiles(ctx context.Context, bucket *b2.Bucket, files []string) error {
 
 	for _, f := range files {
 

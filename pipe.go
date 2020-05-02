@@ -2,17 +2,15 @@ package main
 
 import (
 	"bufio"
+	"context"
 	"fmt"
 	"os"
 	"time"
+
+	"github.com/kurin/blazer/b2"
 )
 
-func uploadSTDIN(files []string) error {
-
-	ctx, bucket, err := getBucket()
-	if nil != err {
-		return err
-	}
+func uploadSTDIN(ctx context.Context, bucket *b2.Bucket, files []string) error {
 
 	// TODO: can't budio.NewReader fail?
 	// https://github.com/golang/go/issues/14162
@@ -29,7 +27,7 @@ func uploadSTDIN(files []string) error {
 
 	fmt.Println("Uploading STDIN to BackBlaze..")
 
-	if err = uploadOneReader(ctx, bucket, r, fileName); nil != err {
+	if err := uploadOneReader(ctx, bucket, r, fileName); nil != err {
 		return err
 	}
 

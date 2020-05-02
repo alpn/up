@@ -8,14 +8,25 @@ import (
 	"path/filepath"
 )
 
-func run(isPipeMode bool, isDirectoryMode bool, args []string) error {
+func run(isPipeMode bool, isDirectoryMode bool, bucketName string, args []string) error {
 
 	if isPipeMode && isDirectoryMode {
-		return errors.New("bad params")
+		return errors.New("directory mode and pipe mode are mutually exclusive")
 	}
 
+	if isPipeMode && len(bucketName) == 0 {
+		return errors.New("bucket name must be provided in pipe mode")
+	}
+
+	ctx, bucket, e := getBucket(bucketName)
+	if e != nil {
+		return e
+	}
+
+	fmt.Println("Bucket: ", bucket.Name())
+
 	if isPipeMode {
-		return uploadSTDIN(args)
+		return uploadSTDIN(ctx, bucket, args)
 	}
 
 	if isDirectoryMode {
@@ -49,7 +60,7 @@ func run(isPipeMode bool, isDirectoryMode bool, args []string) error {
 			return err
 		}
 		if confirmed {
-			return uploadDirectory(rootAbs)
+			return uploadDirectory(ctx, bucket, rootAbs)
 		}
 		return nil
 	}
@@ -65,7 +76,7 @@ func run(isPipeMode bool, isDirectoryMode bool, args []string) error {
 		}
 
 		if confirmed {
-			return uploadFiles(args)
+			return uploadFiles(ctx, bucket, args)
 		}
 	}
 	return nil
@@ -75,16 +86,14 @@ func main() {
 
 	var isPipeMode bool
 	var isDirectoryMode bool
+	var bucketName string
 
 	flag.BoolVar(&isPipeMode, "pipe", false, "reads and uploads data from STDIN until EOF is reached. Does NOT ask for confirmation")
 	flag.BoolVar(&isDirectoryMode, "dir", false, "recursively uploads an entire directory. if no path is provided, current directory will be assumed")
-
-	// TODO: add support for bucketName
-	//var bucketName string
-	//flag.StringVar(&bucketName, "bucket", "", "name of destination bucket")
+	flag.StringVar(&bucketName, "bucket", "", "name of destination bucket")
 
 	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, "A simple utility for uploading stuff to BackBlaze's B2\n\n")
+		fmt.Fprintf(os.Stderr, "\nA simple utility for uploading stuff to BackBlaze's B2\n\n")
 		fmt.Fprintf(os.Stderr, "usage: up [-pipe dst_name] [-dir path] [file1 .. fileN]\n\n")
 		flag.PrintDefaults()
 	}
@@ -93,7 +102,7 @@ func main() {
 
 	args := flag.Args()
 
-	if err := run(isPipeMode, isDirectoryMode, args); err != nil {
+	if err := run(isPipeMode, isDirectoryMode, bucketName, args); err != nil {
 		fmt.Fprintf(os.Stderr, "error: %v\n", err)
 		os.Exit(1)
 	}
