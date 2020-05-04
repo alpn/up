@@ -6,7 +6,12 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+
+	"github.com/kurin/blazer/b2"
 )
+
+// B2Client - a temporary global pointer to an authenticated b2.Client
+var B2Client *b2.Client
 
 func run(isPipeMode bool, isDirectoryMode bool, bucketName string, args []string) error {
 

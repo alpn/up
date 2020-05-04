@@ -49,17 +49,18 @@ func getAllBuckets() (context.Context, []*b2.Bucket, error) {
 	ctx := context.Background()
 
 	// b2_authorize_account
-	b2, err := b2.NewClient(ctx, id, key)
+	b2client, err := b2.NewClient(ctx, id, key)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	buckets, err := b2.ListBuckets(ctx)
+	buckets, err := b2client.ListBuckets(ctx)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	if len(buckets) > 0 {
+		B2Client = b2client
 		return ctx, buckets, nil
 	}
 
