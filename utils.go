@@ -67,7 +67,7 @@ func getAllBuckets() (context.Context, []*b2.Bucket, error) {
 	return nil, nil, errors.New("No buckets were found")
 }
 
-func chooseBucket(buckets []*b2.Bucket) (*b2.Bucket, error) {
+func promptUserToChooseBucket(buckets []*b2.Bucket) (*b2.Bucket, error) {
 
 	for {
 		fmt.Println("The following buckets are available:")
@@ -94,18 +94,31 @@ func chooseBucket(buckets []*b2.Bucket) (*b2.Bucket, error) {
 	}
 }
 
-func getBucket(name string) (context.Context, *b2.Bucket, error) {
-	ctx, buckets, err := getAllBuckets()
-	if nil != err {
-		return nil, nil, err
+func pickBucket(buckets []*b2.Bucket, name string) *b2.Bucket {
+
+	if len(name) == 0 && len(buckets) == 1 {
+		return buckets[0]
 	}
 
 	for _, b := range buckets {
 		if b.Name() == name {
-			return ctx, b, nil
+			return b
 		}
 	}
 
-	bucket, err := chooseBucket(buckets)
-	return ctx, bucket, err
+	return nil
+}
+
+func pickBucketPrompt(buckets []*b2.Bucket, name string) (*b2.Bucket, error) {
+
+	bucket := pickBucket(buckets, name)
+	if nil != bucket {
+		return bucket, nil
+	}
+
+	bucket, err := promptUserToChooseBucket(buckets)
+	if nil != err {
+		return nil, err
+	}
+	return bucket, nil
 }

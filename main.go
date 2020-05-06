@@ -19,20 +19,23 @@ func run(isPipeMode bool, isDirectoryMode bool, bucketName string, args []string
 		return errors.New("directory mode and pipe mode are mutually exclusive")
 	}
 
-	if isPipeMode && len(bucketName) == 0 {
-		return errors.New("bucket name must be provided in pipe mode")
+	ctx, buckets, err := getAllBuckets()
+	if nil != err {
+		return err
 	}
-
-	ctx, bucket, e := getBucket(bucketName)
-	if e != nil {
-		return e
-	}
-
-	fmt.Println("Bucket: ", bucket.Name())
 
 	if isPipeMode {
+
+		bucket := pickBucket(buckets, bucketName)
+		fmt.Println("Bucket: ", bucket.Name())
 		return uploadSTDIN(ctx, bucket, args)
 	}
+
+	bucket, err := pickBucketPrompt(buckets, bucketName)
+	if nil != err {
+		return err
+	}
+	fmt.Println("Bucket: ", bucket.Name())
 
 	if isDirectoryMode {
 
