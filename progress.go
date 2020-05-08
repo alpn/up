@@ -5,6 +5,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/ttacon/chalk"
 	"github.com/vbauerster/mpb"
 	"github.com/vbauerster/mpb/decor"
 )
@@ -38,7 +39,7 @@ func showProgress(stop chan bool, wg *sync.WaitGroup, bucketName string, name st
 
 			// replace ETA decorator with "done" message, OnComplete event
 			decor.OnComplete(
-				decor.AverageETA(decor.ET_STYLE_GO, decor.WC{W: 4}), "done",
+				decor.AverageETA(decor.ET_STYLE_GO, decor.WC{W: 4}), fmt.Sprintf("%sdone%s", chalk.Green, chalk.Reset),
 			),
 		),
 		mpb.AppendDecorators(decor.Percentage()),
