@@ -11,8 +11,8 @@ import (
 	"github.com/kurin/blazer/b2"
 )
 
-func getDstPathString(bucket *b2.Bucket, fileName string) string {
-	return "b2://" + bucket.Name() + "/" + fileName
+func getDstPathString(bucketName string, fileName string) string {
+	return "b2://" + bucketName + "/" + fileName
 }
 
 func confirmAction() (bool, error) {
