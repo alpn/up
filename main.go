@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 
 	"github.com/kurin/blazer/b2"
+	"github.com/ttacon/chalk"
 )
 
 // B2Client - a temporary global pointer to an authenticated b2.Client
@@ -35,7 +36,7 @@ func run(isPipeMode bool, isDirectoryMode bool, bucketName string, args []string
 	if nil != err {
 		return err
 	}
-	fmt.Println("Bucket: ", bucket.Name())
+	fmt.Println("Bucket:", chalk.Green, bucket.Name(), chalk.Reset)
 
 	if isDirectoryMode {
 
@@ -68,6 +69,7 @@ func run(isPipeMode bool, isDirectoryMode bool, bucketName string, args []string
 			return err
 		}
 		if confirmed {
+			fmt.Printf("Uploading file to %sBackBlaze B2%s cloud storage\n", chalk.Red, chalk.Reset)
 			return uploadDirectory(ctx, bucket, rootAbs)
 		}
 		return nil

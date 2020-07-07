@@ -31,8 +31,6 @@ func uploadFile(ctx context.Context, bucket *b2.Bucket, path string) error {
 		return err
 	}
 
-	fmt.Println("=> ", getDstPathString(bucket, dstName))
-
 	return nil
 }
 

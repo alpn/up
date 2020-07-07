@@ -31,7 +31,7 @@ func uploadSTDIN(ctx context.Context, bucket *b2.Bucket, files []string) error {
 		return err
 	}
 
-	dstFull := getDstPathString(bucket, fileName)
+	dstFull := getDstPathString(bucket.Name(), fileName)
 	fmt.Println("EOF received. File has been uploaded to BackBlaze => " + dstFull)
 	return nil
 }
