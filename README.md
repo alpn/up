@@ -2,6 +2,7 @@ Up
 ====
 
 ![](https://github.com/alpn/up/workflows/Go/badge.svg)
+[![Go Report Card](https://goreportcard.com/badge/github.com/alpn/up)](https://goreportcard.com/report/github.com/alpn/up)
 
 Up is a simple utility for uploading stuff to BackBlaze's B2 cluod storage service.
 It's merely a thin wrapper around [Blazer](https://github.com/kurin/blazer) by @kurin.
