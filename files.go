@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/kurin/blazer/b2"
+	"github.com/ttacon/chalk"
 )
 
 func uploadFile(ctx context.Context, bucket *b2.Bucket, path string) error {
@@ -23,11 +23,12 @@ func uploadFile(ctx context.Context, bucket *b2.Bucket, path string) error {
 		return err
 	}
 
-	fmt.Println(path, fi.Size())
+	formmatedSize := ByteCountSI(fi.Size())
+	fileName := filepath.Base(path)
+	dir := filepath.Dir(path)
+	fileString := fmt.Sprintf("%s/%s%s %s(%s)%s", dir, chalk.Blue, fileName, chalk.Yellow, formmatedSize, chalk.Reset)
 
-	dstName := strings.Trim(path, "/") //filepath.Base(path)
-
-	if err = uploadOneReader(ctx, bucket, f, dstName); nil != err {
+	if err = uploadOneReader(ctx, bucket, f, fileString, path, false); nil != err {
 		return err
 	}
 

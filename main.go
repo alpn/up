@@ -28,7 +28,7 @@ func run(isPipeMode bool, isDirectoryMode bool, bucketName string, args []string
 	if isPipeMode {
 
 		bucket := pickBucket(buckets, bucketName)
-		fmt.Println("Bucket: ", bucket.Name())
+		printBucket(bucket.Name())
 		return uploadSTDIN(ctx, bucket, args)
 	}
 
@@ -36,7 +36,7 @@ func run(isPipeMode bool, isDirectoryMode bool, bucketName string, args []string
 	if nil != err {
 		return err
 	}
-	fmt.Println("Bucket:", chalk.Green, bucket.Name(), chalk.Reset)
+	printBucket(bucket.Name())
 
 	if isDirectoryMode {
 
@@ -69,7 +69,7 @@ func run(isPipeMode bool, isDirectoryMode bool, bucketName string, args []string
 			return err
 		}
 		if confirmed {
-			fmt.Printf("Uploading file to %sBackBlaze B2%s cloud storage\n", chalk.Red, chalk.Reset)
+			fmt.Printf("Uploading files to %sBackBlaze B2%s cloud storage:\n\n", chalk.Red, chalk.Reset)
 			return uploadDirectory(ctx, bucket, rootAbs)
 		}
 		return nil
@@ -116,4 +116,6 @@ func main() {
 		fmt.Fprintf(os.Stderr, "error: %v\n", err)
 		os.Exit(1)
 	}
+
+	fmt.Println("\ndone")
 }

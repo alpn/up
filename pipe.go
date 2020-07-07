@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/kurin/blazer/b2"
+	"github.com/ttacon/chalk"
 )
 
 func uploadSTDIN(ctx context.Context, bucket *b2.Bucket, files []string) error {
@@ -25,9 +26,10 @@ func uploadSTDIN(ctx context.Context, bucket *b2.Bucket, files []string) error {
 		fileName = "stdin_" + t.Format("2006-01-02-T15:04:05.9999")
 	}
 
-	fmt.Println("Uploading STDIN to BackBlaze..")
+	fmt.Printf("Uploading STDIN to %sBackBlaze B2%s cloud storage:\n\n", chalk.Red, chalk.Reset)
 
-	if err := uploadOneReader(ctx, bucket, r, fileName); nil != err {
+	fileDisplayString := fmt.Sprintf("%s%s%s", chalk.Blue, fileName, chalk.Reset)
+	if err := uploadOneReader(ctx, bucket, r, fileDisplayString, fileName, true); nil != err {
 		return err
 	}
 

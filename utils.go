@@ -9,10 +9,15 @@ import (
 	"strconv"
 
 	"github.com/kurin/blazer/b2"
+	"github.com/ttacon/chalk"
 )
 
 func getDstPathString(bucketName string, fileName string) string {
 	return "b2://" + bucketName + "/" + fileName
+}
+
+func printBucket(name string) {
+	fmt.Println("Bucket:", chalk.Green, name, chalk.Reset)
 }
 
 func confirmAction() (bool, error) {

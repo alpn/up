@@ -17,7 +17,8 @@ func (uw *nopSeekWriter) Write(p []byte) (int, error) {
 	return (*uw.writer).Write(p)
 }
 
-func uploadOneReader(ctx context.Context, bucket *b2.Bucket, src io.Reader, dstName string) error {
+func uploadOneReader(ctx context.Context, bucket *b2.Bucket,
+	src io.Reader, fileDisplayString string, dstName string, isPipe bool) error {
 
 	obj := bucket.Object(dstName)
 	writer := obj.NewWriter(ctx)
@@ -31,7 +32,7 @@ func uploadOneReader(ctx context.Context, bucket *b2.Bucket, src io.Reader, dstN
 		wg.Wait()
 	}()
 
-	go showProgress(stop, &wg, bucket.Name(), dstName)
+	go showProgress(stop, &wg, bucket.Name(), fileDisplayString, isPipe)
 
 	if _, err := io.Copy(dst, src); nil != err {
 		writer.Close()
