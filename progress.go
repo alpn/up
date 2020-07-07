@@ -60,17 +60,18 @@ func makeFileBar(name string) (*mpb.Progress, *mpb.Bar) {
 	)
 	return p, bar
 }
-func showProgress(stop chan bool, wg *sync.WaitGroup, bucketName string, name string, isPipe bool) {
+func showProgress(stop chan bool, wg *sync.WaitGroup, bucketName string,
+	fileDisplayString string, dstName string, isPipe bool) {
 
-	writerName := fmt.Sprintf("%s/%s", bucketName, name)
+	writerName := fmt.Sprintf("%s/%s", bucketName, dstName)
 
 	var p *mpb.Progress
 	var bar *mpb.Bar
 
 	if isPipe {
-		p, bar = makePipeBar(name)
+		p, bar = makePipeBar(fileDisplayString)
 	} else {
-		p, bar = makeFileBar(name)
+		p, bar = makeFileBar(fileDisplayString)
 	}
 
 	defer func() {

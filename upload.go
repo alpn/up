@@ -32,7 +32,7 @@ func uploadOneReader(ctx context.Context, bucket *b2.Bucket,
 		wg.Wait()
 	}()
 
-	go showProgress(stop, &wg, bucket.Name(), fileDisplayString, isPipe)
+	go showProgress(stop, &wg, bucket.Name(), fileDisplayString, dstName, isPipe)
 
 	if _, err := io.Copy(dst, src); nil != err {
 		writer.Close()
