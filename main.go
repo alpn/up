@@ -16,20 +16,16 @@ var B2Client *b2.Client
 
 func run(isPipeMode bool, isDirectoryMode bool, bucketName string, args []string) error {
 
-	if isPipeMode && isDirectoryMode {
-		return errors.New("directory mode and pipe mode are mutually exclusive")
+	if isPipeMode {
+		if isDirectoryMode {
+			return errors.New("directory mode and pipe mode are mutually exclusive")
+		}
+		return handlePipeMode(bucketName, args)
 	}
 
 	ctx, buckets, err := getAllBuckets()
 	if nil != err {
 		return err
-	}
-
-	if isPipeMode {
-
-		bucket := pickBucket(buckets, bucketName)
-		printBucket(bucket.Name())
-		return uploadSTDIN(ctx, bucket, args)
 	}
 
 	bucket, err := pickBucketPrompt(buckets, bucketName)

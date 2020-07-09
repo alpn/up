@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"context"
+	"errors"
 	"fmt"
 	"os"
 	"time"
@@ -10,6 +11,22 @@ import (
 	"github.com/kurin/blazer/b2"
 	"github.com/ttacon/chalk"
 )
+
+func handlePipeMode(bucketName string, files []string) error {
+
+	ctx, buckets, err := getAllBuckets()
+	if nil != err {
+		return err
+	}
+
+	bucket := pickBucket(buckets, bucketName)
+	if nil == bucket {
+		return errors.New("bucket not found")
+	}
+	printBucket(bucket.Name())
+
+	return uploadSTDIN(ctx, bucket, files)
+}
 
 func uploadSTDIN(ctx context.Context, bucket *b2.Bucket, files []string) error {
 
