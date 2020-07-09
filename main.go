@@ -41,12 +41,11 @@ func run(isPipeMode bool, isDirectoryMode bool, bucketName string, args []string
 	if isDirectoryMode {
 
 		var root string
-		if len(args) == 0 {
-			root = "."
-		} else if len(args) == 1 {
+		if len(args) == 1 {
 			root = args[0]
 		} else {
 			flag.Usage()
+			return nil
 		}
 
 		rootAbs, err := filepath.Abs(root)
@@ -68,6 +67,7 @@ func run(isPipeMode bool, isDirectoryMode bool, bucketName string, args []string
 		if nil != err {
 			return err
 		}
+
 		if confirmed {
 			fmt.Printf("Uploading files to %sBackBlaze B2%s cloud storage:\n\n", chalk.Red, chalk.Reset)
 			return uploadDirectory(ctx, bucket, rootAbs)
@@ -99,7 +99,7 @@ func main() {
 	var bucketName string
 
 	flag.BoolVar(&isPipeMode, "pipe", false, "reads and uploads data from STDIN until EOF is reached. Does NOT ask for confirmation")
-	flag.BoolVar(&isDirectoryMode, "dir", false, "recursively uploads an entire directory. if no path is provided, current directory will be assumed")
+	flag.BoolVar(&isDirectoryMode, "dir", false, "recursively uploads an entire directory.")
 	flag.StringVar(&bucketName, "bucket", "", "name of destination bucket")
 
 	flag.Usage = func() {
