@@ -26,7 +26,7 @@ func uploadFile(ctx context.Context, bucket *b2.Bucket, path string) error {
 	formmatedSize := ByteCountSI(fi.Size())
 	fileName := filepath.Base(path)
 	dir := filepath.Dir(path)
-	fileString := fmt.Sprintf("%s/%s%s %s(%s)%s", dir, chalk.Blue, fileName, chalk.Yellow, formmatedSize, chalk.Reset)
+	fileString := fmt.Sprintf("%s/%s%s %s(%s)%s", dir, chalk.Yellow, fileName, chalk.Blue, formmatedSize, chalk.Reset)
 
 	if err = uploadOneReader(ctx, bucket, f, fileString, path, false); nil != err {
 		return err
