@@ -1,4 +1,4 @@
-Up
+Up ⤴️
 ====
 
 ![](https://github.com/alpn/up/workflows/Go/badge.svg)
