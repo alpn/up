@@ -78,7 +78,9 @@ func uploadFiles(ctx context.Context, bucket *b2.Bucket, files []string, allowDi
 
 		if fs.IsDir() {
 			if allowDirectories {
-				return uploadDirectory(ctx, bucket, path)
+				if err = uploadDirectory(ctx, bucket, path); nil != err {
+					return err
+				}
 			}
 			fmt.Printf("%s%s%s is a directory, but '-dir' flag was not specified - skipping\n",
 				chalk.Yellow, f, chalk.Reset)
