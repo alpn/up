@@ -44,7 +44,8 @@ func main() {
 	var bucketName string
 
 	flag.BoolVar(&isPipeMode, "pipe", false,
-		"Read and upload data from STDIN until EOF is reached. Does NOT ask for confirmation")
+		"Read and upload data from STDIN until EOF is reached. Does NOT ask for confirmation."+
+			"If your account has more than one bucket available, '-bucket' flag is required")
 	flag.BoolVar(&allowDirectories, "dir", false,
 		"Upload directories (recursively). When this option is not specified, directories are ignored")
 	flag.StringVar(&bucketName, "bucket", "", "name of destination bucket")
