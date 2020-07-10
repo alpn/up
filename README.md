@@ -7,29 +7,36 @@ Up ⤴️
 Up is a simple utility for uploading stuff to BackBlaze's B2 cluod storage service.
 It's merely a thin wrapper around [Blazer](https://github.com/kurin/blazer) by @kurin.
 
-## Build
+## Build / Install
 ```bash
 git clone https://github.com/alpn/up.git
 cd up
 go build
+
+# optionally, move the binary to a PATH directory, e.g
+mv up /usr/local/bin
 ```
+
 ## Usage
 
-### Files
+### Uploading files and directories
 ```bash
-./up file1 file2 ..
+# upload files and *ignore* directories
+up file1 file2 ..
+
+# upload files and directories
+up -dir file1 file2 dir1 dir2 ..
 ```
-### Directories
+![](https://github.com/alpn/up/raw/master/.media/files.gif)
+
+### Uploading pipes
 
 ```bash
 
-./up -dir . 
-
+curl -s https://example.com/file.dat | up -pipe -bucket BUCKET_NAME
 ```
-### Upload STDIN
+![](https://github.com/alpn/up/raw/master/.media/pipe.gif)
 
-```bash
+## License
+MIT
 
-zfs send snapshot_342 | ./up -pipe
-
-```
