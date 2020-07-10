@@ -46,7 +46,7 @@ func uploadSTDIN(ctx context.Context, bucket *b2.Bucket, files []string) error {
 	fmt.Printf("Uploading STDIN to %sBackBlaze B2%s cloud storage:\n\n", chalk.Red, chalk.Reset)
 
 	fileDisplayString := fmt.Sprintf("%s%s%s", chalk.Blue, fileName, chalk.Reset)
-	if err := uploadOneReader(ctx, bucket, r, fileDisplayString, fileName, true); nil != err {
+	if err := uploadSingleReader(ctx, bucket, r, fileDisplayString, fileName, true); nil != err {
 		return err
 	}
 

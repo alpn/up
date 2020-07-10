@@ -10,7 +10,7 @@ import (
 	"github.com/ttacon/chalk"
 )
 
-func uploadFile(ctx context.Context, bucket *b2.Bucket, path string) error {
+func uploadSingleFile(ctx context.Context, bucket *b2.Bucket, path string) error {
 
 	f, err := os.Open(path)
 	if err != nil {
@@ -28,7 +28,7 @@ func uploadFile(ctx context.Context, bucket *b2.Bucket, path string) error {
 	dir := filepath.Dir(path)
 	fileString := fmt.Sprintf("%s/%s%s %s(%s)%s", dir, chalk.Yellow, fileName, chalk.Blue, formmatedSize, chalk.Reset)
 
-	if err = uploadOneReader(ctx, bucket, f, fileString, path, false); nil != err {
+	if err = uploadSingleReader(ctx, bucket, f, fileString, path, false); nil != err {
 		return err
 	}
 
@@ -42,7 +42,7 @@ func uploadDirectory(ctx context.Context, bucket *b2.Bucket, rootAbs string) err
 			return err
 		}
 		if !info.IsDir() {
-			if err = uploadFile(ctx, bucket, path); nil != err {
+			if err = uploadSingleFile(ctx, bucket, path); nil != err {
 				return err
 			}
 		}
@@ -57,7 +57,7 @@ func uploadDirectory(ctx context.Context, bucket *b2.Bucket, rootAbs string) err
 	return nil
 }
 
-func uploadFiles(ctx context.Context, bucket *b2.Bucket, files []string) error {
+func uploadFiles(ctx context.Context, bucket *b2.Bucket, files []string, allowDirectories bool) error {
 
 	for _, f := range files {
 
@@ -66,11 +66,47 @@ func uploadFiles(ctx context.Context, bucket *b2.Bucket, files []string) error {
 			return err
 		}
 
-		if err = uploadFile(ctx, bucket, path); nil != err {
+		fs, err := os.Stat(path)
+		if nil != err {
+			if os.IsNotExist(err) {
+				fmt.Printf("%s%s%s does not exist\n",
+					chalk.Yellow, f, chalk.Reset)
+				continue
+			}
+			return err
+		}
+
+		if fs.IsDir() {
+			if allowDirectories {
+				return uploadDirectory(ctx, bucket, path)
+			}
+			fmt.Printf("%s%s%s is a directory, but '-dir' was not provided - skipping\n",
+				chalk.Yellow, f, chalk.Reset)
+
+		} else if err = uploadSingleFile(ctx, bucket, path); nil != err {
 			return err
 		}
 
 	}
 
 	return nil
+}
+
+func handleFiles(bucketName string, files []string, allowDirectories bool) error {
+
+	ctx, buckets, err := getAllBuckets()
+	if nil != err {
+		return err
+	}
+
+	bucket, err := pickBucketPrompt(buckets, bucketName)
+	if nil != err {
+		return err
+	}
+
+	printBucket(bucket.Name())
+	fmt.Printf("Uploading files to %sBackBlaze B2%s cloud storage:\n\n", chalk.Red, chalk.Reset)
+
+	return uploadFiles(ctx, bucket, files, allowDirectories)
+
 }

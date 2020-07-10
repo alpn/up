@@ -5,10 +5,8 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"path/filepath"
 
 	"github.com/kurin/blazer/b2"
-	"github.com/ttacon/chalk"
 )
 
 // B2Client - a temporary global pointer to an authenticated b2.Client
@@ -23,68 +21,19 @@ func run(isPipeMode bool, isDirectoryMode bool, bucketName string, args []string
 		return handlePipeMode(bucketName, args)
 	}
 
-	ctx, buckets, err := getAllBuckets()
-	if nil != err {
-		return err
-	}
-
-	bucket, err := pickBucketPrompt(buckets, bucketName)
-	if nil != err {
-		return err
-	}
-	printBucket(bucket.Name())
-
-	if isDirectoryMode {
-
-		var root string
-		if len(args) == 1 {
-			root = args[0]
-		} else {
-			flag.Usage()
-			return nil
-		}
-
-		rootAbs, err := filepath.Abs(root)
-		if nil != err {
-			return err
-		}
-
-		f, err := os.Stat(rootAbs)
-		if nil != err {
-			return err
-		}
-
-		if !f.IsDir() {
-			return errors.New(rootAbs + " is not a directory")
-		}
-
-		fmt.Println("About to recuresively upload diretory -", rootAbs)
-		confirmed, err := confirmAction()
-		if nil != err {
-			return err
-		}
-
-		if confirmed {
-			fmt.Printf("Uploading files to %sBackBlaze B2%s cloud storage:\n\n", chalk.Red, chalk.Reset)
-			return uploadDirectory(ctx, bucket, rootAbs)
-		}
-		return nil
-	}
-
-	// Files mode
 	if len(args) > 0 {
 
 		fmt.Println("About to upload the following file[/s]:", args)
-
 		confirmed, err := confirmAction()
 		if nil != err {
 			return err
 		}
 
 		if confirmed {
-			return uploadFiles(ctx, bucket, args)
+			return handleFiles(bucketName, args, isDirectoryMode)
 		}
 	}
+
 	return nil
 }
 

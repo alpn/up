@@ -17,7 +17,7 @@ func (uw *nopSeekWriter) Write(p []byte) (int, error) {
 	return (*uw.writer).Write(p)
 }
 
-func uploadOneReader(ctx context.Context, bucket *b2.Bucket,
+func uploadSingleReader(ctx context.Context, bucket *b2.Bucket,
 	src io.Reader, fileDisplayString string, dstName string, isPipe bool) error {
 
 	obj := bucket.Object(dstName)
