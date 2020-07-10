@@ -39,8 +39,8 @@ curl -s https://example.com/file.dat | up -pipe -bucket BUCKET_NAME
 
 ## Credits
 * [kurin/blazer](https://github.com/kurin/blazer)
-*	[vbauerster/mpb](github.com/vbauerster/mpb)
-* [ttacon/chalk](github.com/ttacon/chalk)
+*	[vbauerster/mpb](https://github.com/vbauerster/mpb)
+* [ttacon/chalk](https://github.com/ttacon/chalk)
 
 ## License
 MIT
