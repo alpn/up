@@ -99,29 +99,38 @@ func promptUserToChooseBucket(buckets []*b2.Bucket) (*b2.Bucket, error) {
 	}
 }
 
-func pickBucket(buckets []*b2.Bucket, name string) *b2.Bucket {
+func pickBucket(buckets []*b2.Bucket, name string) (*b2.Bucket, error) {
 
 	if len(name) == 0 && len(buckets) == 1 {
-		return buckets[0]
+		return buckets[0], nil
 	}
 
+	avilableBuckets := ""
 	for _, b := range buckets {
 		if b.Name() == name {
-			return b
+			return b, nil
 		}
+		avilableBuckets += b.Name() + ", "
 	}
 
-	return nil
+	avilableBuckets = "The following buckets are available:\n" + avilableBuckets
+
+	if len(name) == 0 {
+		return nil, errors.New(
+			"Bucket name must be provided for accounts with multiple buckets.\n" + avilableBuckets)
+	}
+
+	return nil, errors.New("Bucket '" + name + "' was not found.\n" + avilableBuckets)
 }
 
 func pickBucketPrompt(buckets []*b2.Bucket, name string) (*b2.Bucket, error) {
 
-	bucket := pickBucket(buckets, name)
+	bucket, err := pickBucket(buckets, name)
 	if nil != bucket {
 		return bucket, nil
 	}
 
-	bucket, err := promptUserToChooseBucket(buckets)
+	bucket, err = promptUserToChooseBucket(buckets)
 	if nil != err {
 		return nil, err
 	}

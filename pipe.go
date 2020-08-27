@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"context"
-	"errors"
 	"fmt"
 	"os"
 	"time"
@@ -19,9 +18,9 @@ func handlePipeMode(bucketName string, files []string) error {
 		return err
 	}
 
-	bucket := pickBucket(buckets, bucketName)
-	if nil == bucket {
-		return errors.New("bucket not found")
+	bucket, err := pickBucket(buckets, bucketName)
+	if err != nil {
+		return err
 	}
 	printBucket(bucket.Name())
 
