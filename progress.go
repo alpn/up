@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/ttacon/chalk"
-	"github.com/vbauerster/mpb"
-	"github.com/vbauerster/mpb/decor"
+	"github.com/vbauerster/mpb/v5"
+	"github.com/vbauerster/mpb/v5/decor"
 )
 
 const total = 100
