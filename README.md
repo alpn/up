@@ -37,6 +37,10 @@ curl -s https://example.com/file.dat | up -pipe -bucket BUCKET_NAME
 ```
 ![](https://github.com/alpn/up/raw/master/.media/pipe.gif)
 
+## TODO
+- [ ] Add encryption
+- [ ] Add tests
+
 ## Credits
 * [kurin/blazer](https://github.com/kurin/blazer)
 *	[vbauerster/mpb](https://github.com/vbauerster/mpb)
